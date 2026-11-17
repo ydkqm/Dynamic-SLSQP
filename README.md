@@ -24,7 +24,7 @@ An ensemble framework for predicting mouse intravenous acute toxicity on the pLD
 
 | Library | Version |
 |---|---|
-| Python | CPython 3.12* |
+| Python | CPython 3.12 |
 | PyTorch | 2.8.0+cu128 |
 | NumPy | 2.3.2 |
 | pandas | 3.0.3 |
@@ -35,7 +35,7 @@ An ensemble framework for predicting mouse intravenous acute toxicity on the pLD
 | joblib | 1.5.3 |
 | tqdm | Numeric version not recorded |
 
-These versions were extracted from the supplied server environment export. *Python 3.12 is identified from its `cp312` wheel tag; the patch version was not recorded. The export is an environment record, not a verified portable installation lockfile. The `cu128` suffix identifies the PyTorch CUDA build.
+Versions are from the supplied server export. Python 3.12 is indicated by the `cp312` wheel tag; its patch version was not recorded.
 
 ### Installation
 
@@ -46,8 +46,6 @@ python -m pip install -r requirements.txt
 python -m pip check
 python verify_release.py
 ```
-
-Use a separate Python environment and install the PyTorch build appropriate for the target hardware. The full server snapshot contains machine-specific installation paths; use the root `requirements.txt` for installation. Actual package versions are recorded in each training run's `run_metadata.json`.
 
 ## Dataset
 
@@ -60,9 +58,7 @@ Canonical SMILES
 mouse_intravenous_LD50
 ```
 
-Data preparation removes missing SMILES, exact duplicate SMILES strings, and invalid molecular structures. Greedy redundancy filtering uses radius-2, 2048-bit Morgan fingerprints and retains a molecule only when its maximum Tanimoto similarity to previously retained molecules is below 0.80. Label cleaning follows this step. Two seed-42 random splits produce an 80%/10%/10% partition.
-
-The archived study contains 11,454 training, 1,432 validation, and 1,432 held-out test samples after preparation. `preparation_audit.json` records processing counts and file hashes. Source order and software versions affect preprocessing reproducibility.
+Dataset split: 11,454 training, 1,432 validation, and 1,432 held-out test samples.
 
 ## Model Architecture
 
@@ -75,12 +71,6 @@ The archived study contains 11,454 training, 1,432 validation, and 1,432 held-ou
 | Neural regression | 576→256→128 MLP backbone and a 128→1 linear regression head. |
 | Traditional regression | RidgeCV, BayesianRidge, ElasticNetCV, HistGradientBoostingRegressor, RandomForestRegressor, ExtraTreesRegressor, and KNeighborsRegressor. |
 | Final ensemble | Eight candidates: `DL_mean` and seven regression outputs, combined using nonnegative SLSQP weights that sum to one. |
-
-Within each outer fold, five networks use seeds 42, 1024, 2026, 8888, and 9999. Their 128-dimensional hidden representations are concatenated into 640 features for each traditional regression pipeline, which fits its own StandardScaler on that fold's training features.
-
-An internal stopping subset selects training epochs. The networks are then reinitialized and trained on the full outer-training subset. Five-fold cross-fitting produces the training out-of-fold (OOF) predictions used to learn one global set of SLSQP weights. All eight candidates enter optimization; no error-threshold candidate filtering is applied.
-
-Neural networks and regressors share a fold-specific standardized Yeo–Johnson target transformation. Each prediction is inverse-transformed to pLD50 before averaging. For validation and test data, predictions of the same candidate are averaged across five folds and combined with the fixed ensemble weights. The final predictor uses 25 neural networks and 35 fitted regressors.
 
 ## Training
 
@@ -100,9 +90,7 @@ Place `train.csv`, `val.csv`, and `test.csv` in `data/fixed/`:
 python run.py --data-dir data/fixed --cache-dir cache/main --output-dir results/main --save-ml-models
 ```
 
-The `--save-ml-models` option is required for subsequent complete-ensemble prediction. Saved regressors can require substantial disk space. Use a new output directory for a new run.
-
-Feature caches are reused after provenance checks. For verified historical `v40_etkdg_3dmlp_*.pt` caches without the current provenance records, explicitly add `--trust-legacy-cache` after checking sample order and extraction settings. Use `--chemberta-model /path/to/local/model` to select a local pretrained model; add `--offline` for offline execution.
+Use `--save-ml-models` to save the fitted regressors required by `predict.py`.
 
 ## Prediction
 
@@ -112,8 +100,6 @@ Provide a CSV containing the same SMILES column. Toxicity labels are not require
 python predict.py --run-dir results/main --input-csv data/new_molecules.csv --cache-dir cache/new --output-csv results/new_predictions.csv
 ```
 
-The output contains the eight cross-fold candidate predictions and the final `pred_pLD50`. These are continuous regression values, not probabilities. Keep the complete saved training directory, including preprocessors and traditional regressors, for inference.
-
 ## Reference Results
 
 | Model | Validation RMSE | Validation R² | Test RMSE | Test R² |
@@ -122,7 +108,7 @@ The output contains the eight cross-fold candidate predictions and the final `pr
 | Static-Ensemble | 0.448387 | 0.624547 | 0.454010 | 0.609726 |
 | Dynamic-SLSQP | 0.445187 | 0.629886 | 0.452606 | 0.612135 |
 
-These tables reproduce the archived final-model run; they are not results from a new training run of this release. DL-E2E averages direct neural predictions, Static-Ensemble averages the seven traditional candidates, and Dynamic-SLSQP combines all eight candidates. The test split comes from the same source dataset and is not an external validation cohort. The OOF matrix is used to fit ensemble weights, so the fitted ensemble's OOF error is not an independent test estimate.
+Metrics from the archived final-model run.
 
 ## Resources
 
