@@ -1,8 +1,0 @@
-{
-  "archived_model_sha256": "a4f222b483422e85be39a5dc64cea260195efbb5db888db7ec78405d1d7c02c6",
-  "historical_split_sha256": {
-    "train": "272d8ced8dce9a2ff18ed3131034be77cba212dab4a6099201979e609ac5d971",
-    "val": "e17c97427e3eb17147c407aaf6703ffe3fe1d5b726f35e9f60e8721bc22952d4",
-    "test": "7163d045f0f7b9b49de50c177e9a664d865a32849d9a3b89bbee618479e7c1e9"
-  }
-}

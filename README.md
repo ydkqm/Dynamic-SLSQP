@@ -12,7 +12,6 @@ An ensemble framework for predicting mouse intravenous acute toxicity on the pLD
 | `main_model.py` | Feature extraction, multimodal neural network, five-fold cross-fitting, traditional regressors, and SLSQP weight optimization. |
 | `predict.py` | Prediction for new molecules using the saved five-fold ensemble. |
 | `runtime_artifacts.py` | Saving preprocessors, neural checkpoints, predictions, and optional fitted regressors. |
-| `reference_results/` | Archived performance tables, ensemble weights, and split-file hashes. |
 | `environment/` | Server dependency snapshot and extracted core-package versions. |
 | `requirements.txt` | Dependency ranges for installing the main-model workflow. |
 | `verify_release.py` | CPU checks for data preparation, cache consistency, and saved-predictor replay. |
@@ -35,17 +34,6 @@ An ensemble framework for predicting mouse intravenous acute toxicity on the pLD
 | joblib | 1.5.3 |
 | tqdm | Numeric version not recorded |
 
-Versions are from the supplied server export. Python 3.12 is indicated by the `cp312` wheel tag; its patch version was not recorded.
-
-### Installation
-
-```bash
-git clone https://github.com/ydkqm/Dynamic-SLSQP.git
-cd Dynamic-SLSQP
-python -m pip install -r requirements.txt
-python -m pip check
-python verify_release.py
-```
 
 ## Dataset
 
@@ -100,15 +88,6 @@ Provide a CSV containing the same SMILES column. Toxicity labels are not require
 python predict.py --run-dir results/main --input-csv data/new_molecules.csv --cache-dir cache/new --output-csv results/new_predictions.csv
 ```
 
-## Reference Results
-
-| Model | Validation RMSE | Validation R² | Test RMSE | Test R² |
-|---|---:|---:|---:|---:|
-| DL-E2E | 0.446210 | 0.628184 | 0.453925 | 0.609872 |
-| Static-Ensemble | 0.448387 | 0.624547 | 0.454010 | 0.609726 |
-| Dynamic-SLSQP | 0.445187 | 0.629886 | 0.452606 | 0.612135 |
-
-Metrics from the archived final-model run.
 
 ## Resources
 
