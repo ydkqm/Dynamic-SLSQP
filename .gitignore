@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+data/*
+!data/README.md
+cache/
+results/
+*.pt
+*.pth
+*.joblib
+*.npz
+*.npy
+*.log
+.DS_Store

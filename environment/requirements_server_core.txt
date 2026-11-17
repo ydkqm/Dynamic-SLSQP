@@ -1,0 +1,12 @@
+# Versions recorded in the user-supplied server snapshot, not independently installed/tested here.
+# Python ABI indicated by the PyTorch wheel: CPython 3.12 (patch version not recorded).
+# Install the appropriate PyTorch build separately for your operating system/GPU.
+numpy==2.3.2
+pandas==3.0.3
+scipy==1.17.1
+scikit-learn==1.8.0
+rdkit==2026.3.2
+transformers==5.9.0
+joblib==1.5.3
+# The snapshot contains tqdm as a file:// install, without a numeric version.
+tqdm>=4.66

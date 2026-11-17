@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-17",
+  "change": "Remove OOF-MSE relative-threshold candidate filtering; optimize all eight candidates. No other model training algorithm changed.",
+  "checks": {
+    "preparation_parity": "passed",
+    "five_fold_saved_predictor_replay": "passed; atol=1e-12",
+    "poor_candidate_still_retained": "passed",
+    "weights_nonnegative_sum_one": "passed",
+    "python_syntax": "passed"
+  },
+  "archived_real_OOF_comparison": {
+    "old_candidates": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "new_candidates": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "max_abs_weight_difference": 0.0,
+    "reference_OOF_rows": 11454
+  },
+  "limitations": [
+    "No full-data retraining was performed for this change.",
+    "Archived reference results are not newly trained results."
+  ],
+  "environment_documentation": {
+    "server_snapshot_sha256": "1e5a1af9edabb4ea4e88c1d0d285412a287fd5fa1e9b5409421271ce750db5a2",
+    "python_sources_unchanged_from_verified_no_filter_release": true,
+    "full_environment_installation_test": "not performed",
+    "pandas_requirement_corrected": "pandas>=2.1,<4"
+  }
+}
