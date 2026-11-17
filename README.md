@@ -32,7 +32,6 @@ An ensemble framework for predicting mouse intravenous acute toxicity on the pLD
 | RDKit | 2026.3.2 |
 | Transformers | 5.9.0 |
 | joblib | 1.5.3 |
-| tqdm | Numeric version not recorded |
 
 
 ## Dataset
